@@ -1,0 +1,52 @@
+%h3{:class => "section_heading"}="Videos for #{@client.name}"
+
+#client_videos{:class => "section"}
+  %ul{:class => "column"}
+    -@videos.each do |video|
+      %li{:class => "column_li"}
+        %div{:class => "imgblock"}
+          %img{:src => "#{video.thumbnail_filepath}", :width => 200}
+          Thumbnail Preview
+        %div{:class => "detail"}
+          %table{:class => "details_view"}
+            %tr
+              %td{:class => "first"} Filename
+              %td
+                %strong=video.basename
+            %tr
+              %td{:class => "first"} Duration
+              %td=video.duration
+            %tr
+              %td{:class => "first"} Width
+              %td=video.width
+            %tr
+              %td{:class => "first"} Height
+              %td=video.height
+            %tr
+              %td{:class => "first"} FPS
+              %td=video.fps
+            %tr
+              %td{:class => "first"} Encodings
+              %td
+                %ul{:class => "table_list"}
+                  -video.video_encodings.each do |ve|
+                    %li
+                      %a{:href => "#encoding_#{ve.id}", :class => "video_link"}=ve.filename
+                      |
+                      =ve.state
+                    %div{:style => "display:none;"}
+                      %div{:id => "encoding_#{ve.id}"}
+                        %object{:id => "player", :classid => "clsid:D27CDB6E-AE6D-11cf-96B8-444553540000", :name => "player", :width => "400", :height => "315"}
+                          %param{:name => "movie", :value => "player.swf"}
+                          %param{:name => "allowfullscreen", :value => "true"}
+                          %param{:name => "allowscriptaccess", :value => "always"}
+                          %param{:name => "flashvars", :value => "file=#{ve.filepath}&image=#{ve.thumbnail_path}"}
+
+                          %embed{:type => "application/x-shockwave-flash", :id => "player2", :name => "player2", :src => "player.swf", :width => "400", :height => "315", :allowscriptaccess => "always", :allowfullscreen => "true", :flashvars => "file=#{ve.filepath}&image=#{ve.thumbnail_path}"}
+        
+
+%a{:href => "#", :onclick => "$('#client_details').hideElement();", :class => "right"} Hide Details
+:javascript
+  $('.video_link').fancybox({
+    'hideOnContentClick':false
+  });

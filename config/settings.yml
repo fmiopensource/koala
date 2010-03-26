@@ -1,0 +1,36 @@
+# Environment Settings
+# --------------------------------
+defaults: &defaults
+  :log_level: warn
+  :redis:
+    :port: 6379
+    
+  # S3 Storage Settings
+  :s3_base_url: https://s3.amazonaws.com
+  :s3_access_key_id: your_access_key_id
+  :s3_secret_access_key: your_secret_access_key
+  
+  # Notifications
+  :max_notification_attempts: 6
+
+:development:
+  <<: *defaults
+  :log_level: debug
+  :resque_redis: localhost:6379
+  # Local File Store Settings
+  :temp_video_filepath: public/data/tmp_videos
+
+:test:
+  <<: *defaults
+  :redis:
+    :port: 6380
+  :resque_redis: localhost:6380
+  # Local File Store Settings
+  :temp_video_filepath: test/data/tmp_videos
+
+:production:
+  <<: *defaults
+  :log_level: debug
+  :resque_redis: localhost:6379
+  # Local File Store Settings
+  :temp_video_filepath: public/data/tmp_videos

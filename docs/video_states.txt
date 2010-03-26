@@ -1,0 +1,18 @@
+Video States
+=============
+
+1. created (initial)
+2. queued (awaiting processing)
+3. processed
+4. uploaded
+5. encoded
+6. failed
+
+Transitions
+=============
+
+1. queue => :enter => will download the specified file from S3
+2. perform_upload => will transition from processed to uploaded
+   :on_exit => perform_cleanup unless auto_encode is true
+3. perform_encode => will transition from uploaded to encoded
+   :on_exit => perform_cleanup

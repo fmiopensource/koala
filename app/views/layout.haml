@@ -1,0 +1,23 @@
+!!! Strict
+%html
+  %head
+    %title Koala Video Server
+    %meta{:"http-equiv" => "Content-Type", :content => "text/html; charset=utf-8"}
+    %link{:rel => "stylesheet", :href => "/css/koala/site.css", :type => "text/css"}
+    %link{:rel => "stylesheet", :href => "/css/jquery.fancybox-1.3.0.css", :type => "text/css"}
+    %script{:type => "text/javascript", :src => "/js/jquery-1.3.2.min.js"}
+    %script{:type => "text/javascript", :src => "/js/jquery.fancybox-1.3.0.pack.js"}
+    %script{:type => "text/javascript", :src => "/js/swfobject.js"}
+    %script{:type => "text/javascript", :src => "/js/application.js"}
+  %body
+    #top_header
+      #logo_container
+        %img{:src => "/images/koalaLogo.png"}
+      #menu_container
+        %ul{:class => "menu"}
+          %li
+            %a{:href => '/', :class => 'dashboard'}
+          %li
+            %a{:href => "/resque/", :class => "resque", :target => "_blank"}
+    #content
+      != yield

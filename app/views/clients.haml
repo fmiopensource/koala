@@ -1,0 +1,48 @@
+#info_area
+  / Area for displaying information from the server, if any
+  
+#client_form{:class => "form_area", :style => "display:none;"}
+  / Area for displaying the create and edit forms for clients
+
+%h2{:class => "section_heading"} Clients
+
+%table{:id => "client_table", :cellspacing => "0", :class => "index_view"}
+  %tr
+    %th{:class => 'first'}
+      Id
+    %th
+      Client Name
+    %th
+      Access Key
+    %th
+      S3 Bucket
+    %th
+      Notification URL
+    %th{:class => "nobg"}
+    
+  - @clients.each do |client|
+    %tr{:id => "client_#{client.id}"}
+      %td{:class => 'first'}
+        = client.id
+      %td
+        = client.name
+      %td
+        = client.access_key
+      %td
+        = client.s3_bucket_name
+      %td
+        = client.notification_url
+      %td{:class => "last"}
+        / Area for action links
+        %a{:href => "#", :onclick => "showClientVideos(#{client.id})", :class => "video"} Videos
+        |
+        %a{:href => "#", :onclick => "showClientProfiles(#{client.id})", :class => "show"} Profiles
+        |
+        %a{:href => "#", :onclick => "editClient(#{client.id})", :class => "edit"} Edit 
+        | 
+        %a{:href => "#", :onclick => "deleteClient(#{client.id})", :class => "remove"} Delete
+
+%a{:href => '#', :onclick => "newClient();", :class => "insert"} Create New  
+
+#client_details{:style => "display:none;"}
+/ Area for displaying client details

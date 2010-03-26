@@ -1,0 +1,77 @@
+Koala Video Server
+=====================
+
+January 9, 2010
+
+Requirement
+=============
+AAU - I want to be able to either create encoded videos by uploading a video file to the server or by specifying a file that already exists on S3.
+
+Solution
+=============
+Expose two URLs
+  POST api/client/1/videos/upload - for uploading videos to server
+  
+  Description:
+    Allows for the uploading of files to Koala. Once the video is uploaded to Koala, it goes through several states.
+    
+    Control Flow:
+    1. A video is uploaded to Koala.
+    2. Koala creates the video objects and sends back an appropriate response. The video state is "queued"
+    3. Koala queues the Video job on Resque.
+    4. A Resque worker pops the video from the queue and processes the video.
+    5. The processing step reads the metadata from the video file using RVideo::Inspector. The video state is "processed".
+    6. The video is then placed
+    4. Koala creates an upload job to store the file on s3.
+    5. Post process
+    
+        If auto_encode is false
+          Koala deletes the file stored locally and stops further processing on this video.
+        If auto_encode is true 
+          Koala does not delete the file stored locally in order to speed up the processing on this video. 
+          Koala creates and EncodingJob to encode the video.
+          A notification is sent to the client describing the status of the encoding
+       
+	
+	parameters:   
+	  filename (required) - the file being uploaded
+	  access_key (required) - required for all requests made to the API
+		
+	responses:
+	  if the upload succeeds, a json response is sent back to the originating server
+	  sample response:
+	    {status => "ok", video => {:id => "1", :filename => "something.png"}, error => {}}
+	  
+	  if the upload fails, a json response is sent back to the originating server
+	  sample response:
+	    {status => "fail", error => {:code => "see below", :msg => "An error message describing the error"}}
+	    
+	  Error Codes:
+	    2 - no video specified
+	    3 - general upload failure
+	    100 - Authentication Error
+
+
+	POST api/client/1/videos/encode - for encoding videos already on s3
+	
+	Description:
+  Allows a video to be created from an existing file on s3.
+	
+	parameters:
+	  filename (required) - the name of the file on s3
+	  access_key (required) - required for every request made to the api
+	  
+	responses:
+	  if the file exists on s3, a success is sent back to the server
+	  sample response:
+	    {status => "ok", video => {:id => "1", :filename => "something.mov"}, error => {}}
+	    
+	  if the file does not exist a json response is sent back to the server
+	  sameple response:
+	    {status => "fail", :error => {:code => "see below", :msg => "An error message describing the error"}}
+	    
+	  Error Code:
+	    5 - file does not exist on s3
+	    100 - invalid API access_key
+	  
+	PUT /api/clients/1/videos/1/encode

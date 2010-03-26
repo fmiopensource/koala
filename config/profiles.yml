@@ -1,0 +1,26 @@
+# profileOne:
+#   title: Flash Video SD
+#   container: flv
+#   encoded_filename_suffix: SD
+#   video_command: ffmpeg -i $input_file$ -ar 22050 -ab $audio_bitrate$ -f flv -b $video_bitrate_in_bits$ -r 24 $resolution_and_padding$ -y $output_file$
+#   video_bitrate: 300
+#   audio_command:
+#   audio_bitrate: 48
+#   width: 320
+#   height: 240
+#   fps: 24
+#   player: flash
+  
+profileTwo:
+  title: Flash Video HD
+  container: flv
+  encoded_filename_suffix: HD
+  video_command: ffmpeg -i $input_file$ -ar 22050 -f flv -r 24 -y $output_file$
+  video_bitrate: 400
+  audio_command:
+  audio_bitrate: 48
+  width: 480
+  height: 360
+  fps: 24
+  player: flash
+  
