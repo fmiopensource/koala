@@ -199,6 +199,7 @@ If you would like to contribute to Koala, there are several things that still ne
 
 * Bugs/Patches - submit them through github
 * Authentication - at the moment, the front-end does not have any authentication
+* Ruby 1.9 Support
 
 # License #
 
