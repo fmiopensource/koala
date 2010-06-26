@@ -33,6 +33,7 @@ class Main
     ensure_video(:s3)
     
     client = Client[params[:id]]
+    params[:video][:filename] = URI.parse(params[:video][:filename]).path
     video = Video.create_on(:encode, params[:video], client)
     respond_with_success(:video => video.to_json)
   end

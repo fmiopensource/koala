@@ -90,7 +90,7 @@ class VideoEncoding < Ohm::Model
     video, profile = self.video, self.profile
     begin
       transcoder = RVideo::Transcoder.new(video.filepath)
-      recipe = profile.video_command.concat(" \nflvtool2 -U $output_file$")
+      recipe = profile.is_flash? ? profile.video_command.concat(" \nflvtool2 -U $output_file$") : profile.video_command
       self.update(:started_encoding_at => Time.now)
       transcoder.execute(recipe, recipe_options(video.filepath, encoding_filepath, profile))
       self.update(:finished_encoding_at => Time.now, :filepath => encoding_filepath)

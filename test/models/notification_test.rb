@@ -72,7 +72,7 @@ class NotificationTest < Test::Unit::TestCase
     body_json = { :video_id => video.id, 
                   :video_state => video.state, 
                   :video_thumbnail => video.thumbnail_filepath,
-                  :encodings => [{:id => video_encoding.id.to_i, :filename => video_encoding.filename, :state => video_encoding.state}] }
+                  :encodings => [{:id => video_encoding.id.to_i, :filename => video_encoding.filename, :filepath => video_encoding.filepath, :state => video_encoding.state}] }
     assert_equal body_json.to_json, notification.to_json
   end
 end

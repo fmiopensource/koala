@@ -23,4 +23,8 @@ class Profile < Ohm::Model
   def audio_bitrate_in_bits
     self.audio_bitrate.to_i * 1024
   end
+  
+  def is_flash?
+    self.container == "flv"
+  end
 end

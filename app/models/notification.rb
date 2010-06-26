@@ -58,7 +58,7 @@ class Notification < Ohm::Model
   
   def process_notification
     RestClient.post(self.video.client_notification_url, self.to_json, :content_type => :json) { |response|
-      number_of_attempts = self.attempts.blank? ? 1 : self.attempts + 1
+      number_of_attempts = self.attempts.blank? ? 1 : self.attempts.to_i + 1
       self.update(:attempts => number_of_attempts, :last_send_at => Time.now)
       
       case response.code
@@ -91,7 +91,7 @@ class Notification < Ohm::Model
       attrs[:video_thumbnail] = video.thumbnail_filepath
       attrs[:encodings] = []
       video.video_encodings.each do |ve|
-        attrs[:encodings] << {:id => ve.id.to_i, :filename => ve.filename, :state => ve.state}
+        attrs[:encodings] << {:id => ve.id.to_i, :filename => ve.filename, :filepath => ve.filepath, :state => ve.state}
       end
     end
     attrs.to_json
@@ -101,6 +101,6 @@ class Notification < Ohm::Model
 private
   def max_attempts_not_reached?
     return true if self.attempts.blank?
-    self.attempts < settings(:max_notification_attempts)
+    self.attempts.to_i < settings(:max_notification_attempts)
   end
 end
