@@ -1,0 +1,69 @@
+#remove-me
+  width: 666px
+  margin: auto
+  background: #f8f8f8
+  padding: 30px
+  border: 1px solid #e9e9e9
+
+  code
+    font: 12px Monaco, "Courier New", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace
+    background: #fff
+    padding: 0 2px
+    border: 1px solid #e9e9e9
+
+body
+  background-color: white
+  font-family: "Helvetica Neue", "Helvetica", sans-serif
+  font-size: 13.34px
+  padding: 15px
+  color: #000
+
+=clearfix
+  *display:     inline-block
+  &:after
+    content:    " "
+    display:    block
+    height:     0
+    clear:      both
+    visibility: hidden
+
+.clear
+  clear: both
+  width: 100%
+  font-size: 0px
+
+= title
+  font-family: "Helvetica", sans-serif
+  font-size: 2em
+  font-weight: bold
+  text-transform: lowercase
+
+h1
+  font-size: 30px
+
+h2
+  font-size: 20px
+
+p
+  margin: 20px 0
+  line-height: 20px
+
+form
+  > p
+    label
+      +title
+
+    input
+      font-size: 2em
+      margin: 5px 0 0 0
+
+  fieldset
+    border-width: 0
+    padding: 0
+    margin: 20px 0
+
+    legend
+      +title
+
+  span.example
+    color: #777
