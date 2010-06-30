@@ -4,7 +4,8 @@ faker 0.3.1 git://github.com/yyyc514/faker.git
 haml 3.0.13 git://github.com/nex3/haml.git
 monk-glue git://github.com/monkrb/glue.git
 ohm 0.0.35 git://github.com/soveran/ohm.git
-redis 2.0.3 git://github.com/ezmobius/redis-rb.git
+ohm-contrib 0.0.26 git://github.com/sinefunc/ohm-contrib.git
+redis 2.0.0 git://github.com/ezmobius/redis-rb.git
 override 0.0.10 (test) git://github.com/soveran/override.git
 quietbacktrace 0.1.1 git://github.com/thoughtbot/quietbacktrace.git
 rack 1.2.1 git://github.com/rack/rack.git
@@ -13,6 +14,7 @@ sinatra 1.0 git://github.com/sinatra/sinatra.git
 spawn 0.1.3 git://github.com/soveran/spawn.git
 stories 0.1.3 (test) git://github.com/citrusbyte/stories.git
 webrat 0.7.0 (test) git://github.com/brynary/webrat.git
+mocha 0.9.8 (test) git://github.com/floehopper/mocha.git
 
 resque 1.9.5 git://github.com/defunkt/resque.git
 

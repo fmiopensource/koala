@@ -6,6 +6,7 @@ require "rack/test"
 require "contest"
 require "override"
 require "quietbacktrace"
+require "mocha"
 
 begin
   puts "Connected to Redis #{Ohm.redis.info[:redis_version]} on #{monk_settings(:redis)[:host]}:#{monk_settings(:redis)[:port]}, database #{monk_settings(:redis)[:db]}."
@@ -33,7 +34,7 @@ class Test::Unit::TestCase
   def setup
     # Uncomment if you want to reset the database
     # before each test.
-    # Ohm.flush
+    Ohm.flush
   end
 
   def app

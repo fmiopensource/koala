@@ -1,0 +1,25 @@
+profileTwo:
+  title: Test Flash
+  container: flv
+  encoded_filename_suffix: HD
+  video_command: ffmpeg -i $input_file$ -ar 22050 -f flv -r 24 -y $output_file$
+  video_bitrate: 400
+  audio_command:
+  audio_bitrate: 48
+  width: 480
+  height: 360
+  fps: 24
+  player: flash
+  
+profileThree:
+  title: Test x264
+  container: mp4
+  encoded_filename_suffix: x264
+  video_command: ffmpeg -i $input_file$ -acodec libfaac -ab $audio_bitrate$ -vcodec libx264 -vpre hq -crf 22 -y $output_file$
+  video_bitrate: 400
+  audio_command:
+  audio_bitrate: 96
+  width: 640
+  height: 480
+  fps: 24
+  player: x264

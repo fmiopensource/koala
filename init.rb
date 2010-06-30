@@ -10,8 +10,11 @@ end
 
 require "monk/glue"
 require "ohm"
+require "ohm/contrib"
 require "haml"
 require "sass"
+require "ruby-debug"
+require 'aasm'
 
 class Main < Monk::Glue
   set :app_file, __FILE__
