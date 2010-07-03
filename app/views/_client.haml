@@ -1,0 +1,20 @@
+%tr{:id => "client_#{client.id}"}
+  %td{:class => 'first'}
+    = client.id
+  %td
+    = client.name
+  %td
+    = client.access_key
+  %td
+    = client.s3_bucket_name
+  %td
+    = client.notification_url
+  %td{:class => "last"}
+    / Area for action links
+    %a{:href => "#", :onclick => "showClientVideos(#{client.id})", :class => "video"} Videos
+    |
+    %a{:href => "#", :onclick => "showClientProfiles(#{client.id})", :class => "show"} Profiles
+    |
+    %a{:href => "#", :onclick => "editClient(#{client.id})", :class => "edit"} Edit 
+    | 
+    %a{:href => "#", :onclick => "deleteClient(#{client.id})", :class => "remove"} Delete

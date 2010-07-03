@@ -15,10 +15,12 @@ require "haml"
 require "sass"
 require "ruby-debug"
 require 'aasm'
+require 'sinatra/content_for'
 
 class Main < Monk::Glue
   set :app_file, __FILE__
   use Rack::Session::Cookie
+  helpers Sinatra::ContentFor
 end
 
 # Connect to redis database.

@@ -1,6 +1,9 @@
 class Main
+  # Root
+  # ====================================
+  
   get "/" do
-    @redis = monk_settings(:redis)
-    haml :home
+    @clients = Client.all.sort
+    haml :clients, :layout => !request.xhr?
   end
 end

@@ -1,0 +1,28 @@
+#info_area
+  / Area for displaying information from the server, if any
+  
+#client_form{:class => "form_area", :style => "display:none;"}
+  / Area for displaying the create and edit forms for clients
+
+%h2{:class => "section_heading"} Clients
+
+%table{:id => "client_table", :cellspacing => "0", :class => "index_view"}
+  %tr
+    %th{:class => 'first'}
+      Id
+    %th
+      Client Name
+    %th
+      Access Key
+    %th
+      S3 Bucket
+    %th
+      Notification URL
+    %th{:class => "nobg"}
+    
+  != partial :client, :collection => @clients
+
+%a{:href => '#', :onclick => "newClient();", :class => "insert"} Create New  
+
+#client_details{:style => "display:none;"}
+/ Area for displaying client details
