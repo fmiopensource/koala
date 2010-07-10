@@ -1,0 +1,7 @@
+#validation_errors{:class => "validation"}
+  = message
+  %br
+  %ul
+    - entity.error_messages.each do |error|
+      %li=error
+      

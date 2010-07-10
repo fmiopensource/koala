@@ -1,0 +1,15 @@
+%div{:class => "form_header"}
+  %a{:href => "javascript:void(0)", :onclick => "$('#client_form').hideElement();", :class => "right"} Close
+  %h3{:class => "form_heading"} Edit Client Information
+
+%form{:id => "client_edit_form"}
+  %p
+    %label{:for => "name"} Name
+    %br
+    %input{:type => "text", :id => "name", :name => "client[name]", :value => @client.name,:class => "title"}
+  %p
+    %label{:for => "notification_url"} Notification URL
+    %br
+    %input{:type => "text", :id => "notification_url", :name => "client[notification_url]", :value => @client.notification_url, :class => "title"}
+  %p{:class => "submit"}
+    %input{:type => "submit", :value => "Update", :id => "client_edit_submit"}

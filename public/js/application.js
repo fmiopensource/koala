@@ -19,47 +19,47 @@ function createClient() {
 	$('input#client_create_submit').click(function(event) {
 		event.preventDefault();
 		$.ajax({
-        url: '/clients',
-        type: 'POST',
-        dataType: 'json',
-        data: $('form#client_create_form').serialize(),
-        success: 	function(data) {
-										// clear previous validation errors if they exist
-										$('#validation_errors').remove();
-										if(data.errors.length > 0) {
-											showErrors("The following errors prevented the Client from being saved", data.errors);
-										}else {
-					      			appendToOrReplaceInClientTable(data, "append");
-											$('form#client_create_form').clearForm();
-											showSuccess("Client successfully created.")
-										}
-                 }
-    });
+			url: '/clients',
+			type: 'POST',
+			dataType: 'html',
+			data: $('form#client_create_form').serialize(),
+			success: function(data) {
+				$('#client_table').append(data);
+				$('form#client_create_form').clearForm();
+				showSuccess("Client successfully created");
+			},
+			error: function(error) {
+				$('#info_area').html(error.responseText);
+			}
+		});
 	});
 }
 
-// PUT /clients/id
+
+// PUT /clients/:id
 function updateClient(clientId) {
 	$('input#client_edit_submit').click(function(event) {
 		event.preventDefault();
 		$.ajax({
-        url: '/clients/' + clientId,
-        type: 'PUT',
-        dataType: 'json',
-        data: $('form#client_edit_form').serialize(),
-        success: 	function(data) {
-					// clear previous validation errors if they exist
-					$('#validation_errors').remove();
-					if(data.errors.length > 0) {
-						showErrors("The following errors prevented the Client from being saved", data.errors);
-					}else {
-	     			appendToOrReplaceInClientTable(data, "replace");
-						$('form#client_edit_form').clearForm();
-						showSuccess("Client successfully updated.")
-					}
-	      }
-    });
+			url: '/clients/' + clientId,
+			type: 'PUT',
+			dataType: 'html',
+			data: $('form#client_edit_form').serialize(),
+			success: function(data) {
+				replaceClientDetails(data, clientId);
+			},
+			error: function(error) {
+				$('#info_area').html(error.responseText);
+			}
+		});
 	});
+}
+
+// custom callback function used by updateClient
+function replaceClientDetails(data, clientId) {
+	$('tr#client_'+clientId).replaceWith(data);
+	$('form#client_edit_form').clearForm();
+	showSuccess("Client successfully updated.");
 }
 
 // GET /cients/id
@@ -112,68 +112,21 @@ function deleteClient(clientId) {
 		$.ajax({
 	      url: '/clients/' + clientId,
 	      type: 'DELETE',
-	      dataType: 'json',
+	      dataType: 'html',
 	      success: function(data) {
-					$('tr#client_'+clientId).remove();
-					showSuccess("Client successfully removed.")
+					removeClientDetails(data, clientId);
 	      },
 	  });
 	}
 	return false;
 }
 
-// GET /clients/id/profiles
-function showClientProfiles(clientId) {
-	$.ajax({
-		url: '/clients/'+clientId+'/profiles',
-		type: 'GET',
-		dataType: 'html',
-		success: function(data) {
-			$('#client_details').html(data);
-			$('#client_details').slideDown('fast');
-		}
-	});
-	return false;
+// callback function to remove a client row from the DOM
+function removeClientDetails(data, clientId) {
+	$('tr#client_'+clientId).remove();
+	showSuccess("Client successfully removed.");
 }
 
-// GET /clients/id/videos
-// TODO: DRY-up the GET ajax calls
-function showClientVideos(clientId) {
-	$.ajax({
-		url: '/clients/'+clientId+'/videos',
-		type: 'GET',
-		dataType: 'html',
-		success: function(data) {
-			$('#client_details').html(data);
-			$('#client_details').slideDown('fast');
-		}
-	});
-	return false;
-}
-
-function appendToOrReplaceInClientTable(data, action) {
-	var html = "<tr id='client_" + data.id + "'>";
-	html += "<td class='first'>" + data.id + "</td>"
-	html += "<td>" + data.name + "</td>";
-	html += "<td>" + data.access_key + "</td>";
-	html += "<td>" + data.s3_bucket_name + "</td>";
-	html += "<td>" + data.notification_url + "</td>";
-	html += "<td class='last'>";
-	html += "<a href='#' onclick='showClientVideos(" + data.id + ")' class='video'>Videos</a>";
-	html += " | ";
-	html += "<a href='#' onclick='showClientProfiles(" + data.id + ")' class='show'>Profiles</a>";
-	html += " | ";
-	html += "<a href='#' onclick='editClient(" + data.id + ")' class='edit'>Edit</a>";
-	html += " | ";
-	html += "<a href='#' onclick='deleteClient(" + data.id + ")' class='remove'>Delete</a>";
-	html += "</td>";
-	html += "</tr>";
-	if(action == 'append') {
-		$('#client_table').append(html);
-	}else if(action == 'replace') {
-		$('tr#client_'+data.id).replaceWith(html);
-	}
-}
 /* end Clients
 ----------------------------------------------------------*/
 

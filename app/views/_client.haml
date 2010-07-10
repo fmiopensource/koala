@@ -11,10 +11,10 @@
     = client.notification_url
   %td{:class => "last"}
     / Area for action links
-    %a{:href => "#", :onclick => "showClientVideos(#{client.id})", :class => "video"} Videos
+    %a{:href => "javascript:void(0)", :onclick => "showClientVideos(#{client.id})", :class => "video"} Videos
     |
-    %a{:href => "#", :onclick => "showClientProfiles(#{client.id})", :class => "show"} Profiles
+    %a{:href => "javascript:void(0)", :onclick => "showClientProfiles(#{client.id})", :class => "show"} Profiles
     |
-    %a{:href => "#", :onclick => "editClient(#{client.id})", :class => "edit"} Edit 
+    %a{:href => "javascript:void(0)", :onclick => "editClient(#{client.id})", :class => "edit"} Edit 
     | 
-    %a{:href => "#", :onclick => "deleteClient(#{client.id})", :class => "remove"} Delete
+    %a{:href => "javascript:void(0)", :onclick => "deleteClient(#{client.id})", :class => "remove"} Delete
