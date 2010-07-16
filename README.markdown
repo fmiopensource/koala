@@ -1,3 +1,4 @@
+
 # Koala Video Server #
 
 * What is it?
@@ -5,7 +6,7 @@
   * Designed to work with Amazon's EC2 computing and S3 storage platforms.
   * Focused on being fast and scalable    
 * What technologies does it use?
-  * Koala is built with the excellent [Monk](http://monkrb.com/) glue framework (Rack, Sinatra, Ohm, Redis)
+  * Koala is built using [Sinatra](http://www.sinatrarb.com/) and [Redis](http://code.google.com/p/redis/)
   * Computationally intensive tasks are queued in the background and processed using [Resque](http://github.com/defunkt/resque).
   * `ffmpeg` is used to encode the videos
 * What features does it currently support?
@@ -18,10 +19,11 @@
 To start using and/or contributing to Koala, you will need to install and setup the following:
 
 * Ruby 1.8.7 (as of this writing the [rVideo](http://github.com/zencoder/rvideo) gem and its dependencies don't work with Ruby 1.9)
-* [Rack](http://rubygems.org/gems/rack)
-* [Sinatra](http://rubygems.org/gems/sinatra)
-* [MonkRB](http://monkrb.com/)
+* [Redis](http://code.google.com/p/redis/)
 * [Resque](http://github.com/defunkt/resque)
+* [ffmpeg](http://www.ffmpeg.org/)
+* [rVideo](http://github.com/zencoder/rvideo)
+* [aws-s3](http://rubygems.org/gems/aws-s3)
 * [Nginx](http://nginx.org/) - _optional - see Note 1_
 * [Nginx Upload Module](http://github.com/vkholodkov/nginx-upload-module) - _optional - see Note 1_
 * [Phusion Passenger for Nginx](http://www.modrails.com/) - _optional - see Note 1_
@@ -29,20 +31,122 @@ To start using and/or contributing to Koala, you will need to install and setup 
 **Note 1:**
 There are two ways to encode videos with Koala. The recommended way is to utilize Koala's cloud-centric design and provide its API with a URI to a video stored on S3. The second way is to upload a video to Koala through its API. Since one of the goals of Koala is to be fast and scalable, multipart file uploading has been outsourced to Nginx and the excellent Nginx Upload module. Thus if you don't require the upload feature, Nginx and the Nginx upload module are not required. A sample nginx.conf has been provided for those that do require this feature.
 
+## Installation and Setup
+
+The following describes the steps required to setup Koala on a machine running Ubuntu (tested with 9.04, 9.10, 10.04). The procedure for other distros should be similar.
+
+### Install Ruby 
+
+As always, begin with an up-to-date system
+
+    sudo apt-get update
+    sudo apt-get dist-upgrade
+
+Next, install Ruby 1.8.7 from the repos
+
+    sudo apt-get install ruby ruby-dev libopenssl-ruby1.8 irb ri rdoc rake
+
+We'll need latest the latest RubyGems
+
+    wget http://production.cf.rubygems.org/rubygems/rubygems-1.3.7.tgz
+    tar xvfz rubygems-1.3.7
+    ruby setup.rb
+
+### Install Redis and Resque
+ 
+Once we have Ruby and friends installed, we need a database for Koala to connect to. Koala relies on Redis to be blazing fast
+
+    wget http://redis.googlecode.com/files/redis-1.2.6.tar.gz
+    tar xvfz redis-1.2.6.tar.gz
+    cd redis-1.2.6
+    make
+
+Note: the above will need to be done in a folder accessible in your `$PATH`. I usually place it in `/usr/local/bin`
+
+To test Redis, type the following in your terminal
+
+    redis-server
+
+The above should start the redis-server without any configuration. If you don't see anything displayed or if the system can't find the command, ensure that you installed Redis in a directory listed in your `$PATH`.
+
+Once you've installed Redis, install supporting gems
+
+    sudo gem install redis redis-namespace json
+
+Koala uses Resque to queue and process the encoding of videos as well as other computationally intensive tasks, we can install it with
+
+    sudo gem install resque
+
+### Install ffmpeg and rVideo
+
+This is probably the most involved and complicated task during the setup - especially if something goes wrong. If you're installing this on Ubuntu then the following should make the process fairly painless.
+
+Begin by installing `ffmpeg` according to [this guide](http://ubuntuforums.org/showthread.php?t=786095) (specific to Ubuntu)
+
+Once installation completes, install the rVideo gem
+
+    sudo gem install rvideo
+
+There is a small error in this version of the gem. To fix, find the path to where the rvideo gem is installed and change the following (found under `rvideo-0.9.3/lib/rvideo/inspector.rb`)
+
+    metadata = /(Input \#.*)\nMust/m.match(@raw_response)
+
+change to
+
+    metadata = /(Input \#.*)\n.+\n\Z/m.match(@raw_response) 
+
+### Install miscellaneous dependencies
+
+    sudo gem install aws-s3
+
+### Install and setup Nginx with Passenger (optional)
+
+If you're planning on just evaluating Koala or contributing to the project this part is optional. If you want to deploy Koala as a service then I strongly recommend going through these steps to setup Nginx with Passenger.
+
+My preferred way of setting up Nginx is through the Passenger gem as they include an amazing interactive installer that greatly simplifies the installation; however, since we'll also be adding the [Nginx Upload Module](http://github.com/vkholodkov/nginx-upload-module) we'll need the source code for both Nginx and the module.
+
+Get the Nginx Upload Module source
+
+    wget http://www.grid.net.ru/nginx/download/nginx_upload_module-2.0.11.tar.gz
+    tar xvfz nginx_upload_module-2.0.11.tar.gz
+
+Get the Nginx source
+
+    wget http://nginx.org/download/nginx-0.7.65.tar.gz
+    tar xvfz nginx-0.7.65.tar.gz
+
+Take note of the path to where you extracted the above as you'll need them when installing Passenger. Next, install the Phusion Passenger gem
+
+    sudo gem install passenger
+
+Now we're ready to let Passenger install Nginx for us
+
+    passenger-install-nginx-module
+
+Read the instructions in the installer carefully, when presented with the install option, choose 2 (Advanced Install). Next, the installer will ask you for the path to the Nginx source, enter the full path and continue.
+
+When it asks you for any additional parameters, enter the following line
+
+    --add-module='/path/to/extracted/nginx_upload_module_source'
+
+Once the installation completes, doing a `sudo nginx` should start the server (test by visiting the url of the server through a browser).
+
+Koala includes a sample `nginx.conf` you can copy and use, it has the configuration options for the upload module already baked in.
+
 ## Running Koala ##
 
 Once you have met the installation requirements, follow these steps to get Koala up and running
 
 1. Edit the `config/settings.yml` file to include your S3 credentials and other settings pertaining to your environment
-2. Run the redis server using one of the provided redis config files:
+2. Koala comes with two Redis configuration files (one for development, the other for testing). You can start the redis server with the following
             
         redis-server config/redis/development.config
 
-3. If not using the upload module, you can use rackup to serve the app:
+3a. If not using the upload module, you can use rackup to serve the app:
 
         rackup -p 3000 -s webrick
 
-4. If you are using Nginx and the Upload module, start nginx:
+4b. Otherwise start Nginx and the Upload module with:
 
         sudo nginx
 
