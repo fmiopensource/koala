@@ -1,0 +1,30 @@
+%div{:class => "model_details"}
+  %table{:class => "details_view"}
+    %tr
+      %td{:class => "first"} Title
+      %td
+        %strong=profile.title
+    %tr
+      %td{:class => "first"} Container
+      %td=profile.container
+    %tr
+      %td{:class => "first"} Video Command
+      %td
+        %code=profile.video_command
+    %tr
+      %td{:class => "first"} Video Bitrate
+      %td=profile.video_bitrate
+    %tr
+      %td{:class => "first"} Audio Bitrate
+      %td=profile.audio_bitrate
+    %tr
+      %td{:class => "first"} Width
+      %td=profile.width
+    %tr
+      %td{:class => "first"} Height
+      %td=profile.height
+    %tr
+      %td{:class => "first"} FPS
+      %td=profile.fps
+      
+%a{:href => "javascript:void(0)", :onclick => "editProfile(#{profile.id})", :class => "edit"} Edit

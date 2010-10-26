@@ -1,18 +1,47 @@
-// Bart Jedrocha - 2009
-// FluidMedia Inc.
-
-/* Application wide
-----------------------------------------------------------*/
-$(function() {
-	// on document ready
-});
-
-/* end Application wide
-----------------------------------------------------------*/
+/*
+ * application.js
+ * 
+ * Application wide javascript.
+ *
+ * (c) Copyright 2010 Bart Jedrocha. All Rights Reserved. 
+ *
+ */
 
 
 /* Clients
 ----------------------------------------------------------*/
+
+// GET /clients/new
+function newClient() {
+	$.ajax({
+		url: '/clients/new',
+		type: 'GET',
+		dataType: 'html',
+		success: function(data) {
+			$('#client_form').html(data);
+			$('#client_form').slideDown('fast');
+			createClient();
+		}
+	});
+	return false;
+}
+
+
+// GET /clients/id/edit
+function editClient(clientId) {
+	$.ajax({
+		url: '/clients/' + clientId + '/edit',
+		type: 'GET',
+		dataType: 'html',
+		success: function(data) {
+			$('#client_form').html(data);
+			$('#client_form').slideDown('fast');
+			updateClient(clientId);
+		}
+	});
+	return false;
+}
+
 
 // POST /clients
 function createClient() {
@@ -55,56 +84,6 @@ function updateClient(clientId) {
 	});
 }
 
-// custom callback function used by updateClient
-function replaceClientDetails(data, clientId) {
-	$('tr#client_'+clientId).replaceWith(data);
-	$('form#client_edit_form').clearForm();
-	showSuccess("Client successfully updated.");
-}
-
-// GET /cients/id
-function showClient(clientId) {
-	$.ajax({
-		url: '/clients/'+clientId,
-		type: 'GET',
-		dataType: 'html',
-		success: function(data) {
-			$('#client_details').html(data);
-			$('#client_details').slideDown('fast');
-		}
-	});
-	return false;
-}
-
-// GET /clients/new
-function newClient() {
-	$.ajax({
-		url: '/clients/new',
-		type: 'GET',
-		dataType: 'html',
-		success: function(data) {
-			$('#client_form').html(data);
-			$('#client_form').slideDown('fast');
-			createClient();
-		}
-	});
-	return false;
-}
-
-// GET /clients/id/edit
-function editClient(clientId) {
-	$.ajax({
-		url: '/clients/' + clientId + '/edit',
-		type: 'GET',
-		dataType: 'html',
-		success: function(data) {
-			$('#client_form').html(data);
-			$('#client_form').slideDown('fast');
-			updateClient(clientId);
-		}
-	});
-	return false;
-}
 
 // DELETE /clients/id
 function deleteClient(clientId) {
@@ -121,6 +100,15 @@ function deleteClient(clientId) {
 	return false;
 }
 
+
+// custom callback function used by updateClient
+function replaceClientDetails(data, clientId) {
+	$('tr#client_'+clientId).replaceWith(data);
+	$('form#client_edit_form').clearForm();
+	showSuccess("Client successfully updated.");
+}
+
+
 // callback function to remove a client row from the DOM
 function removeClientDetails(data, clientId) {
 	$('tr#client_'+clientId).remove();
@@ -128,6 +116,44 @@ function removeClientDetails(data, clientId) {
 }
 
 /* end Clients
+----------------------------------------------------------*/
+
+
+/* Profiles
+----------------------------------------------------------*/
+
+// GET /clients/:id/profiles
+function showClientProfiles(clientId) {
+	$.ajax({
+		url: '/clients/'+clientId+'/profiles',
+		type: 'GET',
+		dataType: 'html',
+		success: function(data) {
+			$('#client_details').html(data);
+			$('#client_details').slideDown('fast');
+		}
+	});
+	return false;
+}
+
+
+// GET /profiles/:id/edit
+function editProfile(profileId) {
+	$.ajax({
+		url: '/profiles/' + profileId + '/edit',
+		type: 'GET',
+		dataType: 'html',
+		success: function(data) {
+			$('#profile_form').html(data);
+			$('#profile_form').slideDown('fast');
+			// TODO: Implement this function
+			// updateProfile(profileId);
+		}
+	});
+	return false;
+}
+
+/* end Profiles
 ----------------------------------------------------------*/
 
 
@@ -141,11 +167,13 @@ function showErrors(message, errors) {
 		html += "<li>" + this + "</li>";
 	});
 	html += "</ul>";
+	html += "</div>";
 	$('#info_area').html(html);
 }
 
 function showSuccess(message) {
 	var html = "<div id='success_message' class='success'>" + message;
+	html += "</div>";
 	$('#info_area').html(html);
 	$('#success_message').idle(2000).fadeOut('slow');
 }

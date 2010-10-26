@@ -1,0 +1,12 @@
+%h3{:class => "section_heading"}="Profiles for #{@client.name}"
+
+#profile_info_area
+  / Area for displaying information from the server, if any
+  
+#profile_form{:class => "form_area", :style => "display:none;"}
+  / Area for displaying the create and edit forms for profiles
+
+#client_encoding_profiles{:class => "section"}  
+  != partial :profile, :collection => @profiles
+
+%a{:href => "javascript:void(0);", :onclick => "$('#client_details').hideElement();", :class => "right"} Hide Details

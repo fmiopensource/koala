@@ -1,0 +1,11 @@
+%div{:class => "form_header"}
+  %a{:href => "javascript:void(0)", :onclick => "$('#profile_form').hideElement();", :class => "right"} Close
+  %h3{:class => "form_heading"} Edit Profile Information
+
+%form{:id => "profile_edit_form"}
+  %p
+    %label{:for => "title"} Title
+    %br
+    %input{:type => "text", :id => "title", :name => "profile[title]", :value => @profile.title, :class => "title"}
+  %p{:class => "submit"}
+    %input{:type => "submit", :value => "Update", :id => "profile_edit_submit"}
