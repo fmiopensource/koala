@@ -7,5 +7,51 @@
     %label{:for => "title"} Title
     %br
     %input{:type => "text", :id => "title", :name => "profile[title]", :value => @profile.title, :class => "title"}
+    
+  %p
+    %label{:for => "container"} Container
+    %br
+    %input{:type => "text", :id => "container", :name => "profile[container]", :value => @profile.container, :class => "title"}
+    
+  %p
+    %label{:for => "encoded_filename_suffix"} Encoded Filename Suffix
+    %br
+    %input{:type => "text", :id => "encoded_filename_suffix", :name => "profile[encoded_filename_suffix]", :value => @profile.encoded_filename_suffix, :class => "title"}
+    
+  %p
+    %label{:for => "video_command"} Video Command
+    %br
+    %input{:type => "text", :id => "video_command", :name => "profile[video_command]", :value => @profile.video_command, :class => "title"}
+    
+  %p
+    %label{:for => "video_bitrate"} Video Bitrate
+    %br
+    %input{:type => "text", :id => "video_bitrate", :name => "profile[video_bitrate]", :value => @profile.video_bitrate, :class => "title"}
+    
+  %p
+    %label{:for => "audio_bitrate"} Audio Bitrate
+    %br
+    %input{:type => "text", :id => "audio_bitrate", :name => "profile[audio_bitrate]", :value => @profile.audio_bitrate, :class => "title"}
+    
+  %p
+    %label{:for => "width"} Width
+    %br
+    %input{:type => "text", :id => "width", :name => "profile[width]", :value => @profile.width, :class => "title"}
+    
+  %p
+    %label{:for => "height"} Height
+    %br
+    %input{:type => "text", :id => "height", :name => "profile[height]", :value => @profile.height, :class => "title"}
+    
+  %p
+    %label{:for => "fps"} FPS
+    %br
+    %input{:type => "text", :id => "fps", :name => "profile[fps]", :value => @profile.fps, :class => "title"}
+    
+  %p
+    %label{:for => "player"} Video Player
+    %br
+    %input{:type => "text", :id => "player", :name => "profile[player]", :value => @profile.player, :class => "title"}
+    
   %p{:class => "submit"}
     %input{:type => "submit", :value => "Update", :id => "profile_edit_submit"}

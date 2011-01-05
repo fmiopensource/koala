@@ -61,4 +61,20 @@ class Main
     @profile = Profile[params[:id]]
     haml :edit_profile, :layout => !request.xhr?
   end
+  
+  post "/clients/:id/profiles" do
+    # TODO: Implement
+  end
+  
+  put "/profiles/:id" do
+    @profile = Profile[params[:id]]
+    @profile.update_attributes(params[:profile])
+    
+    if @profile.save
+      partial :profile, :locals => { :profile => @profile }
+    else
+      status 400
+      partial :errors, :locals => { :entity => @profile, :message => "The following errors prevented the Profile from being saved" }
+    end
+  end
 end

@@ -146,11 +146,36 @@ function editProfile(profileId) {
 		success: function(data) {
 			$('#profile_form').html(data);
 			$('#profile_form').slideDown('fast');
-			// TODO: Implement this function
-			// updateProfile(profileId);
+			updateProfile(profileId);
 		}
 	});
 	return false;
+}
+
+// PUT /profiles/:id
+function updateProfile(profileId) {
+	$('input#profile_edit_submit').click(function(event) {
+		event.preventDefault();
+		$.ajax({
+			url: '/profiles/' + profileId,
+			type: 'PUT',
+			dataType: 'html',
+			data: $('form#profile_edit_form').serialize(),
+			success: function(data) {
+				replaceProfileDetails(data, profileId);
+			},
+			error: function(error) {
+				$('#info_area').html(error.responseText);
+			}
+		});
+	});
+}
+
+// custom callback function used by updateClient
+function replaceProfileDetails(data, profileId) {
+	$('div#profile_' + profiletId).replaceWith(data);
+	$('form#profile_edit_form').clearForm();
+	showSuccess("Profile successfully updated.");
 }
 
 /* end Profiles
